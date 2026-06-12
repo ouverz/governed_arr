@@ -1,0 +1,10 @@
+contract_id,account_id,contract_status,start_date,end_date
+C001,A001,activated,2025-01-01,2025-12-31
+C002,A002,expired,2025-01-01,2025-03-31
+C003,A002,activated,2025-04-01,2025-12-31
+C004,A002,activated,2025-02-15,2025-12-31
+C005,A003,terminated,2025-01-01,2025-02-28
+C006,A003,activated,2025-05-01,2025-12-31
+C007,A004,activated,2025-01-01,2025-12-31
+C008,A005,terminated,2025-01-01,2025-04-30
+C009,A006,activated,2025-03-15,2025-12-31

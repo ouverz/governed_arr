@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: fct_arr_snapshot
+    description: >
+      Certified Ending ARR at calendar month-end, aggregated to snapshot date,
+      account, subscription, and product family.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: snapshot_date
+        description: Calendar month-end on which ARR is measured.
+        data_type: date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: snapshot_date
+      - name: account_id
+        description: Account that owns the active subscription.
+        data_type: varchar
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_account')
+                field: account_id
+      - name: subscription_id
+        description: Active subscription contributing Ending ARR.
+        data_type: varchar
+        data_tests: [not_null]
+      - name: product_family
+        description: Eligible recurring product family.
+        data_type: varchar
+        data_tests: [not_null]
+      - name: ending_arr
+        description: Annualized net recurring value active at month-end.
+        data_type: decimal(18,2)
+        data_tests: [not_null]
+
+  - name: fct_arr_movement
+    description: >
+      Explainable account-level changes in Ending ARR between calendar
+      month-end snapshots. Production calculates balances from an earlier
+      history start and publishes movements only from the configured reporting
+      start, preventing existing accounts from being classified as new merely
+      because reporting begins.
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: snapshot_date
+        description: Month-end at which the movement is recognized.
+        data_type: date
+        data_tests: [not_null]
+      - name: account_id
+        description: Account experiencing the ARR movement.
+        data_type: varchar
+        data_tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_account'), field: account_id}
+      - name: beginning_arr
+        description: Prior month Ending ARR.
+        data_type: decimal(18,2)
+        data_tests: [not_null]
+      - name: ending_arr
+        description: Current month Ending ARR.
+        data_type: decimal(18,2)
+        data_tests: [not_null]
+      - name: movement_amount
+        description: Ending ARR less beginning ARR.
+        data_type: decimal(18,2)
+        data_tests: [not_null]
+      - name: movement_type
+        description: New, expansion, contraction, churn, or reactivation.
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [new, expansion, contraction, churn, reactivation]

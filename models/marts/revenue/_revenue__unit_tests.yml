@@ -1,0 +1,59 @@
+version: 2
+
+unit_tests:
+  - name: fct_arr_snapshot_respects_subscription_and_line_boundaries
+    description: >
+      Proves that a line contributes only when both its subscription and line
+      effective dates include the month-end snapshot.
+    model: fct_arr_snapshot
+    given:
+      - input: ref('int_subscription_arr_lines')
+        rows:
+          - {subscription_line_id: active_jan_feb, subscription_id: subscription_1, account_id: account_1, product_family: Platform, is_arr_eligible: true, line_arr: 1200.00, subscription_start_date: '2025-01-01', subscription_end_date: '2025-12-31', line_start_date: '2025-01-01', line_end_date: '2025-02-28'}
+          - {subscription_line_id: starts_feb, subscription_id: subscription_2, account_id: account_2, product_family: Platform, is_arr_eligible: true, line_arr: 600.00, subscription_start_date: '2025-02-01', subscription_end_date: '2025-12-31', line_start_date: '2025-02-01', line_end_date: '2025-12-31'}
+          - {subscription_line_id: ineligible, subscription_id: subscription_3, account_id: account_3, product_family: Services, is_arr_eligible: false, line_arr: 5000.00, subscription_start_date: '2025-01-01', subscription_end_date: '2025-12-31', line_start_date: '2025-01-01', line_end_date: '2025-12-31'}
+      - input: ref('dim_date')
+        rows:
+          - {snapshot_date: '2025-01-31'}
+          - {snapshot_date: '2025-02-28'}
+          - {snapshot_date: '2025-03-31'}
+    expect:
+      rows:
+        - {snapshot_date: '2025-01-31', account_id: account_1, subscription_id: subscription_1, product_family: Platform, ending_arr: 1200.00}
+        - {snapshot_date: '2025-02-28', account_id: account_1, subscription_id: subscription_1, product_family: Platform, ending_arr: 1200.00}
+        - {snapshot_date: '2025-02-28', account_id: account_2, subscription_id: subscription_2, product_family: Platform, ending_arr: 600.00}
+        - {snapshot_date: '2025-03-31', account_id: account_2, subscription_id: subscription_2, product_family: Platform, ending_arr: 600.00}
+
+  - name: fct_arr_movement_classifies_key_balance_transitions
+    description: >
+      Isolates new, expansion, contraction, churn, and reactivation using two
+      short account balance histories.
+    model: fct_arr_movement
+    given:
+      - input: ref('dim_date')
+        rows:
+          - {snapshot_date: '2025-01-31'}
+          - {snapshot_date: '2025-02-28'}
+          - {snapshot_date: '2025-03-31'}
+          - {snapshot_date: '2025-04-30'}
+      - input: ref('dim_account')
+        rows:
+          - {account_id: lifecycle_account}
+          - {account_id: changing_account}
+      - input: ref('fct_arr_snapshot')
+        rows:
+          - {snapshot_date: '2025-01-31', account_id: lifecycle_account, ending_arr: 100.00}
+          - {snapshot_date: '2025-04-30', account_id: lifecycle_account, ending_arr: 80.00}
+          - {snapshot_date: '2025-01-31', account_id: changing_account, ending_arr: 100.00}
+          - {snapshot_date: '2025-02-28', account_id: changing_account, ending_arr: 150.00}
+          - {snapshot_date: '2025-03-31', account_id: changing_account, ending_arr: 120.00}
+          - {snapshot_date: '2025-04-30', account_id: changing_account, ending_arr: 120.00}
+    expect:
+      rows:
+        - {snapshot_date: '2025-01-31', account_id: lifecycle_account, beginning_arr: 0.00, ending_arr: 100.00, movement_amount: 100.00, movement_type: new}
+        - {snapshot_date: '2025-02-28', account_id: lifecycle_account, beginning_arr: 100.00, ending_arr: 0.00, movement_amount: -100.00, movement_type: churn}
+        - {snapshot_date: '2025-04-30', account_id: lifecycle_account, beginning_arr: 0.00, ending_arr: 80.00, movement_amount: 80.00, movement_type: reactivation}
+        - {snapshot_date: '2025-01-31', account_id: changing_account, beginning_arr: 0.00, ending_arr: 100.00, movement_amount: 100.00, movement_type: new}
+        - {snapshot_date: '2025-02-28', account_id: changing_account, beginning_arr: 100.00, ending_arr: 150.00, movement_amount: 50.00, movement_type: expansion}
+        - {snapshot_date: '2025-03-31', account_id: changing_account, beginning_arr: 150.00, ending_arr: 120.00, movement_amount: -30.00, movement_type: contraction}
+

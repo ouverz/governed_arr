@@ -1,0 +1,5 @@
+product_id,product_name,product_family,charge_type,is_arr_eligible
+P_PLATFORM,Core Platform,Platform,recurring,true
+P_ANALYTICS,Analytics Add-on,Analytics,recurring,true
+P_SERVICES,Implementation Services,Services,services,false
+P_SETUP,Setup Fee,Platform,one_time,false

@@ -1,0 +1,153 @@
+version: 2
+
+seeds:
+  - name: raw_salesforce_accounts
+    description: Synthetic Salesforce account records.
+    columns:
+      - name: account_id
+        data_tests: [not_null, unique]
+
+  - name: raw_salesforce_products
+    description: Product catalog owning charge type and ARR eligibility.
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: charge_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [recurring, services, one_time]
+      - name: is_arr_eligible
+        data_tests: [not_null]
+
+  - name: raw_salesforce_contracts
+    description: Contracts activated from closed-won commercial events.
+    columns:
+      - name: contract_id
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_accounts'), field: account_id}
+
+  - name: raw_salesforce_opportunities
+    description: Closed-won new, renewal, amendment, expansion, and reactivation opportunities.
+    columns:
+      - name: opportunity_id
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_accounts'), field: account_id}
+      - name: contract_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_contracts'), field: contract_id}
+
+  - name: raw_salesforce_subscriptions
+    description: Installed-base subscriptions, including renewal lineage.
+    columns:
+      - name: subscription_id
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('raw_salesforce_accounts'), field: account_id}
+      - name: contract_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_contracts'), field: contract_id}
+      - name: subscription_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [active, cancelled, expired]
+      - name: currency
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [USD]
+
+  - name: raw_salesforce_subscription_lines
+    description: Effective-dated subscription products and amendments.
+    columns:
+      - name: subscription_line_id
+        data_tests: [not_null, unique]
+      - name: subscription_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_subscriptions'), field: subscription_id}
+      - name: product_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_products'), field: product_id}
+      - name: amendment_action
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [new, expand, contract, renew, reactivate]
+      - name: billing_interval_months
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [1, 3, 12]
+
+  - name: raw_salesforce_orders
+    description: Activated orders connecting opportunities, contracts, and subscriptions.
+    columns:
+      - name: order_id
+        data_tests: [not_null, unique]
+      - name: opportunity_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_opportunities'), field: opportunity_id}
+      - name: subscription_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_subscriptions'), field: subscription_id}
+
+  - name: raw_salesforce_order_lines
+    description: Order products connected to effective subscription lines.
+    columns:
+      - name: order_line_id
+        data_tests: [not_null, unique]
+      - name: order_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_orders'), field: order_id}
+      - name: subscription_line_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('raw_salesforce_subscription_lines'), field: subscription_line_id}
+
+  - name: expected_ending_arr
+    description: Hand-calculated monthly company-total acceptance fixture.
+    columns:
+      - name: snapshot_date
+        data_tests: [not_null, unique]
+      - name: expected_ending_arr
+        data_tests: [not_null]
+
+  - name: expected_ending_arr_by_account
+    description: Hand-calculated monthly account-level acceptance fixture.
+    columns:
+      - name: snapshot_date
+        data_tests: [not_null]
+      - name: account_id
+        data_tests: [not_null]
+      - name: expected_ending_arr
+        data_tests: [not_null]
+
+  - name: expected_arr_movements
+    description: Hand-classified account-level ARR movement acceptance fixture.
+    columns:
+      - name: snapshot_date
+        data_tests: [not_null]
+      - name: account_id
+        data_tests: [not_null]
+      - name: movement_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [new, expansion, contraction, churn, reactivation]

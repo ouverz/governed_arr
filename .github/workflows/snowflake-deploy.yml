@@ -1,0 +1,91 @@
+name: Snowflake deployment
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Snowflake environment to deploy
+        required: true
+        default: development
+        type: choice
+        options:
+          - development
+          - production
+
+permissions:
+  contents: read
+
+concurrency:
+  group: snowflake-${{ github.event_name == 'workflow_dispatch' && inputs.environment || github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+
+jobs:
+  deploy-development:
+    name: Deploy isolated development
+    if: github.event_name == 'workflow_dispatch' && inputs.environment == 'development' || github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && vars.ENABLE_SNOWFLAKE_CD == 'true'
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_DATABASE: ${{ vars.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_WAREHOUSE: ${{ vars.SNOWFLAKE_WAREHOUSE }}
+      SNOWFLAKE_SCHEMA: DBT_GHA_${{ github.run_id }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Configure dbt profile
+        run: cp profiles.example.yml profiles.yml
+
+      - name: Build dbt image
+        run: docker compose build
+
+      - name: Validate Snowflake connection
+        run: docker compose run --rm dbt debug --target snowflake_dev
+
+      - name: Deploy to isolated Snowflake schemas
+        run: |
+          docker compose run --rm dbt seed --full-refresh --target snowflake_dev
+          docker compose run --rm dbt build --target snowflake_dev
+
+  deploy-production:
+    name: Deploy production
+    if: github.event_name == 'workflow_dispatch' && inputs.environment == 'production'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_DATABASE: ${{ vars.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_WAREHOUSE: ${{ vars.SNOWFLAKE_WAREHOUSE }}
+      SNOWFLAKE_SCHEMA: DBT_PROD
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure dbt profile
+        run: cp profiles.example.yml profiles.yml
+
+      - name: Build dbt image
+        run: docker compose build
+
+      - name: Validate Snowflake connection
+        run: docker compose run --rm dbt debug --target prod
+
+      - name: Deploy to production schemas
+        run: |
+          docker compose run --rm dbt seed --full-refresh --target prod
+          docker compose run --rm dbt build --target prod

@@ -1,0 +1,12 @@
+opportunity_id,account_id,opportunity_type,stage_name,close_date,contract_id
+O001,A001,new_business,Closed Won,2024-12-15,C001
+O002,A001,amendment,Closed Won,2025-02-20,C001
+O003,A001,amendment,Closed Won,2025-04-20,C001
+O004,A002,new_business,Closed Won,2024-12-20,C002
+O005,A002,renewal,Closed Won,2025-03-15,C003
+O006,A002,expansion,Closed Won,2025-02-10,C004
+O007,A003,new_business,Closed Won,2024-12-22,C005
+O008,A003,reactivation,Closed Won,2025-04-25,C006
+O009,A004,new_business,Closed Won,2024-12-18,C007
+O010,A005,new_business,Closed Won,2024-12-19,C008
+O011,A006,new_business,Closed Won,2025-03-10,C009

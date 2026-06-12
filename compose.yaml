@@ -1,0 +1,19 @@
+services:
+  dbt:
+    build:
+      context: .
+    working_dir: /usr/app
+    volumes:
+      - .:/usr/app
+    environment:
+      DBT_PROFILES_DIR: /usr/app
+      SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT:-}
+      SNOWFLAKE_USER: ${SNOWFLAKE_USER:-}
+      SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD:-}
+      SNOWFLAKE_ROLE: ${SNOWFLAKE_ROLE:-TRANSFORMER}
+      SNOWFLAKE_DATABASE: ${SNOWFLAKE_DATABASE:-ARR_LAB}
+      SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE:-TRANSFORMING}
+      SNOWFLAKE_SCHEMA: ${SNOWFLAKE_SCHEMA:-DBT_PROD}
+    ports:
+      - "8080:8080"
+    command: ["build"]

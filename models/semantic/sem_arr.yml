@@ -1,0 +1,93 @@
+version: 2
+
+semantic_models:
+  - name: account
+    description: Current account attributes approved for ARR metric slicing.
+    model: ref('dim_account')
+    entities:
+      - name: account
+        type: primary
+        expr: account_id
+    dimensions:
+      - name: account_name
+        description: Current account display name.
+        type: categorical
+      - name: segment
+        description: Current commercial segment.
+        type: categorical
+      - name: region
+        description: Current commercial region.
+        type: categorical
+
+  - name: arr_snapshot
+    description: Certified semantic surface for Ending ARR.
+    model: ref('fct_arr_snapshot')
+    defaults:
+      agg_time_dimension: snapshot_date
+    entities:
+      - name: arr_snapshot
+        type: primary
+        expr: snapshot_date || '|' || account_id || '|' || subscription_id || '|' || product_family
+      - name: account
+        type: foreign
+        expr: account_id
+      - name: subscription
+        type: foreign
+        expr: subscription_id
+    dimensions:
+      - name: snapshot_date
+        type: time
+        type_params:
+          time_granularity: month
+      - name: product_family
+        type: categorical
+    measures:
+      - name: ending_arr
+        description: Certified Ending ARR balance at the latest snapshot in the queried time range.
+        agg: sum
+        expr: ending_arr
+        non_additive_dimension:
+          name: snapshot_date
+          window_choice: max
+
+  - name: arr_movement
+    description: Certified semantic surface for explainable ARR movements.
+    model: ref('fct_arr_movement')
+    defaults:
+      agg_time_dimension: snapshot_date
+    entities:
+      - name: arr_movement
+        type: primary
+        expr: snapshot_date || '|' || account_id
+      - name: account
+        type: foreign
+        expr: account_id
+    dimensions:
+      - name: snapshot_date
+        type: time
+        type_params:
+          time_granularity: month
+      - name: movement_type
+        type: categorical
+    measures:
+      - name: net_arr_movement
+        description: Net change in certified Ending ARR.
+        agg: sum
+        expr: movement_amount
+
+metrics:
+  - name: ending_arr
+    description: >
+      Annualized recurring revenue active at calendar month-end, excluding
+      one-time fees, services, credits, tax, and inactive subscriptions.
+    type: simple
+    label: Ending ARR
+    type_params:
+      measure: ending_arr
+
+  - name: net_arr_movement
+    description: Net account-level change in certified Ending ARR.
+    type: simple
+    label: Net ARR Movement
+    type_params:
+      measure: net_arr_movement

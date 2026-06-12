@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: metricflow_time_spine
+    description: >
+      Daily time spine required by the dbt semantic layer. The local fixture
+      range is fixed; production begins before the reporting range and advances
+      through the current date unless an explicit end date is supplied.
+    time_spine:
+      standard_granularity_column: date_day
+    columns:
+      - name: date_day
+        description: One calendar day in the configured history-through-reporting range.
+        granularity: day
+        data_tests: [not_null, unique]
+
+  - name: dim_account
+    description: Current account attributes approved for Ending ARR slicing.
+    columns:
+      - name: account_id
+        description: Stable account identifier.
+        data_tests: [not_null, unique]
+      - name: account_name
+        description: Display name of the account.
+        data_tests: [not_null]
+      - name: segment
+        description: Current commercial segment.
+        data_tests: [not_null]
+      - name: region
+        description: Current commercial region.
+        data_tests: [not_null]
+
+  - name: dim_date
+    description: >
+      Approved calendar month-end snapshot dates, including pre-reporting
+      history used to classify movements correctly.
+    columns:
+      - name: snapshot_date
+        description: Calendar month-end date.
+        data_tests: [not_null, unique]

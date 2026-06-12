@@ -1,0 +1,80 @@
+version: 2
+
+models:
+  - name: stg_salesforce__accounts
+    description: Cleaned account records.
+    columns:
+      - name: account_id
+        data_tests: [not_null, unique]
+
+  - name: stg_salesforce__products
+    description: Cleaned product catalog owning certified ARR eligibility.
+    columns:
+      - name: product_id
+        data_tests: [not_null, unique]
+      - name: is_arr_eligible
+        data_tests: [not_null]
+
+  - name: stg_salesforce__contracts
+    description: Cleaned commercial contracts.
+    columns:
+      - name: contract_id
+        data_tests: [not_null, unique]
+
+  - name: stg_salesforce__opportunities
+    description: Cleaned closed-won commercial events.
+    columns:
+      - name: opportunity_id
+        data_tests: [not_null, unique]
+
+  - name: stg_salesforce__subscriptions
+    description: Cleaned installed-base subscriptions with renewal lineage.
+    columns:
+      - name: subscription_id
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('stg_salesforce__accounts'), field: account_id}
+      - name: subscription_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [active, cancelled, expired]
+      - name: start_date
+        data_tests: [not_null]
+      - name: end_date
+        data_tests: [not_null]
+
+  - name: stg_salesforce__subscription_lines
+    description: Cleaned effective-dated subscription products and amendments.
+    columns:
+      - name: subscription_line_id
+        data_tests: [not_null, unique]
+      - name: subscription_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('stg_salesforce__subscriptions'), field: subscription_id}
+      - name: product_id
+        data_tests:
+          - relationships:
+              arguments: {to: ref('stg_salesforce__products'), field: product_id}
+      - name: line_start_date
+        data_tests: [not_null]
+      - name: line_end_date
+        data_tests: [not_null]
+      - name: net_amount_per_period
+        data_tests: [not_null]
+
+  - name: stg_salesforce__orders
+    description: Cleaned activated orders linking commercial events to subscriptions.
+    columns:
+      - name: order_id
+        data_tests: [not_null, unique]
+
+  - name: stg_salesforce__order_lines
+    description: Cleaned order products linked to subscription lines.
+    columns:
+      - name: order_line_id
+        data_tests: [not_null, unique]

@@ -1,0 +1,12 @@
+order_id,account_id,contract_id,opportunity_id,subscription_id,order_type,order_status,effective_date
+OR001,A001,C001,O001,S001,new,activated,2025-01-01
+OR002,A001,C001,O002,S001,amendment,activated,2025-03-01
+OR003,A001,C001,O003,S001,amendment,activated,2025-05-01
+OR004,A002,C002,O004,S002,new,activated,2025-01-01
+OR005,A002,C003,O005,S003,renewal,activated,2025-04-01
+OR006,A002,C004,O006,S004,expansion,activated,2025-02-15
+OR007,A003,C005,O007,S005,new,activated,2025-01-01
+OR008,A003,C006,O008,S006,reactivation,activated,2025-05-01
+OR009,A004,C007,O009,S007,new,activated,2025-01-01
+OR010,A005,C008,O010,S008,new,activated,2025-01-01
+OR011,A006,C009,O011,S009,new,activated,2025-03-15
