@@ -14,12 +14,14 @@ dispatches. It:
 
 1. creates the ignored runtime `profiles.yml` from `profiles.example.yml`;
 2. parses the DuckDB, isolated Snowflake development, and production targets;
-3. runs the focused dbt unit tests;
-4. downloads the latest successful `main` manifest, when one exists;
-5. builds modified nodes with their dependencies and descendants;
-6. runs the complete local DuckDB build and data-test suite;
-7. executes the local semantic contract validator; and
-8. publishes the successful `main` manifest for future state comparison.
+3. creates empty model relations so unit tests can infer input schemas on a
+   fresh runner;
+4. runs the focused dbt unit tests;
+5. downloads the latest successful `main` manifest, when one exists;
+6. builds modified nodes with their dependencies and descendants;
+7. runs the complete local DuckDB build and data-test suite;
+8. executes the local semantic contract validator; and
+9. publishes the successful `main` manifest for future state comparison.
 
 The first successful `main` run has no prior manifest, so modified-state
 selection is skipped. The complete build still runs.
