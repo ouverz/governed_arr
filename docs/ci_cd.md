@@ -14,8 +14,8 @@ dispatches. It:
 
 1. creates the ignored runtime `profiles.yml` from `profiles.example.yml`;
 2. parses the DuckDB, isolated Snowflake development, and production targets;
-3. creates empty model relations so unit tests can infer input schemas on a
-   fresh runner;
+3. loads the fixture seeds and creates empty model relations so unit tests can
+   infer input schemas on a fresh runner;
 4. runs the focused dbt unit tests;
 5. downloads the latest successful `main` manifest, when one exists;
 6. builds modified nodes with their dependencies and descendants;

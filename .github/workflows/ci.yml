@@ -43,8 +43,10 @@ jobs:
           docker compose run --rm dbt parse --target snowflake_dev
           docker compose run --rm dbt parse --target prod
 
-      - name: Create empty relations for unit-test schema inference
-        run: docker compose run --rm dbt run --empty
+      - name: Create relations for unit-test schema inference
+        run: |
+          docker compose run --rm dbt seed
+          docker compose run --rm dbt run --empty
 
       - name: Run focused unit tests
         run: docker compose run --rm dbt test --select resource_type:unit_test
