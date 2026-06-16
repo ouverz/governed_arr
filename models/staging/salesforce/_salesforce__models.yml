@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_salesforce__accounts
-    description: Cleaned account records from the raw Salesforce source layer.
+    description: Cleaned account records from the raw Salesforce seed layer.
     columns:
       - name: account_id
         data_tests: [not_null, unique]
@@ -16,13 +16,13 @@ models:
         data_tests: [not_null]
 
   - name: stg_salesforce__contracts
-    description: Cleaned commercial contracts from the raw Salesforce source layer.
+    description: Cleaned commercial contracts from the raw Salesforce seed layer.
     columns:
       - name: contract_id
         data_tests: [not_null, unique]
 
   - name: stg_salesforce__opportunities
-    description: Cleaned commercial opportunity events from the raw Salesforce source layer.
+    description: Cleaned commercial opportunity events from the raw Salesforce seed layer.
     columns:
       - name: opportunity_id
         data_tests: [not_null, unique]

@@ -155,16 +155,16 @@ infrequently changing reference data and explicitly identifies exported raw
 data as a poor seed use case.
 
 There are no dbt `sources`; the generated manifest contains zero source nodes.
-Staging models therefore use `ref()` instead of `source()`, losing the
-production patterns for source lineage, source testing, and freshness.
+Because the lab models the raw inputs as dbt seeds, staging models correctly
+use `ref()` instead of `source()`.
 
-**Impact:** The local lab is reproducible, but its raw-to-staging pattern should
-not be presented as the production deployment pattern.
+**Impact:** The local lab is reproducible, but its raw-to-staging pattern is a
+seed-based lab pattern rather than a warehouse-ingestion pattern.
 
-**Recommendation:** Keep seeds as local synthetic inputs, but introduce source
-declarations for the Snowflake deployment path or clearly document the seed
-pattern as lab-only. Production staging models should enter the DAG through
-`source()`.
+**Recommendation:** Keep seeds as local synthetic inputs and document the seed
+pattern explicitly as the lab architecture. If a future production deployment
+adds an external landing zone, introduce `source()` declarations there; until
+then, `ref()` is the correct dependency for the raw seed layer.
 
 ---
 

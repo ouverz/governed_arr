@@ -7,4 +7,4 @@ select
     cast(order_type as varchar) as order_type,
     cast(order_status as varchar) as order_status,
     cast(effective_date as date) as effective_date
-from {{ source('salesforce_raw', 'orders') }}
+from {{ ref('raw_salesforce_orders') }}

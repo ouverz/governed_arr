@@ -8,4 +8,4 @@ select
     cast(start_date as date) as start_date,
     cast(end_date as date) as end_date,
     cast(currency as varchar) as currency
-from {{ source('salesforce_raw', 'subscriptions') }}
+from {{ ref('raw_salesforce_subscriptions') }}

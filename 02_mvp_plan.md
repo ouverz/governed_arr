@@ -57,7 +57,7 @@ The project plan states the broad definition but leaves several implementation c
 | Reporting period | Calendar month-end only |
 | Snapshot range | Fixed range represented in `dim_date` and synthetic data |
 | Active subscription | `start_date <= snapshot_date` and `end_date >= snapshot_date` |
-| Status | Only `active` and `cancelled` statuses are accepted; effective dates determine historical inclusion |
+| Status | `active`, `cancelled`, and `expired` statuses are accepted; effective dates determine historical inclusion |
 | Eligible line | `charge_type = 'recurring'` and product family is not `Services` |
 | Annualization | `net_amount_per_period * 12 / billing_interval_months` |
 | Discounts | Reflected in `net_amount_per_period` before annualization |

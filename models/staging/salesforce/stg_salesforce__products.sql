@@ -4,4 +4,4 @@ select
     cast(product_family as varchar) as product_family,
     cast(charge_type as varchar) as charge_type,
     cast(is_arr_eligible as boolean) as is_arr_eligible
-from {{ source('salesforce_raw', 'products') }}
+from {{ ref('raw_salesforce_products') }}
