@@ -716,6 +716,7 @@ Review at a high level:
 
 - `seeds/schema.yml`
 - each layer's `_models.yml`
+- `docs/singular_business_tests.md`
 - `tests/*.sql`
 - generated artifacts under `target/`
 

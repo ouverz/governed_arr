@@ -232,15 +232,15 @@ is descriptive and that effective dates determine historical inclusion.
 
 ---
 
-### Low: Singular business tests are not documented
+### Low: Singular business tests are documented through a companion catalog
 
-**Location:** `tests/*.sql`
+**Location:** `tests/*.sql` and `docs/singular_business_tests.md`
 
-The singular tests are well named, but there is no `tests/*.yml` file providing
-descriptions for the generated dbt docs catalog.
+The singular tests are well named, and the project now has a short human-readable
+catalog explaining the intent of the high-value checks.
 
-**Recommendation:** Add concise descriptions for the high-value singular tests,
-especially expected-total reconciliation and effective-date tests.
+**Recommendation:** Keep the catalog aligned with any future test additions so
+reviewers can understand the business purpose before reading the SQL.
 
 ## Optional Maturity Improvements
 

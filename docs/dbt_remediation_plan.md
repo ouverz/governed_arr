@@ -268,6 +268,8 @@ queries; a live semantic query remains an environment-level verification.
 
 **Severity:** Medium for production readiness
 
+**Status:** Deferred in this lab
+
 **Problem:** Synthetic exported Salesforce data is represented as dbt seeds,
 which is appropriate locally but not the intended production raw-data pattern.
 
@@ -284,6 +286,10 @@ which is appropriate locally but not the intended production raw-data pattern.
 - Local builds remain fully reproducible.
 - Snowflake compilation shows staging lineage entering through dbt sources.
 - Documentation clearly separates fixture inputs from production ingestion.
+
+**Lab decision:** The current case study intentionally models the raw Salesforce
+inputs as seeds and keeps `ref()` in staging. Production `source()` modeling is a
+follow-on exercise for a live ingestion path, not a defect in the local MVP.
 
 ---
 
@@ -397,19 +403,30 @@ implementation also accepts `expired`.
 
 **Severity:** Low
 
-**Problem:** Singular tests are named clearly but lack descriptions in the dbt
-catalog.
+**Status:** Completed
+
+**Problem:** Singular tests are named clearly but the business intent is easier
+for reviewers to understand when summarized in one place.
 
 **Implementation:**
 
-- Add concise YAML descriptions for the singular tests.
+- Add concise documentation for the singular tests.
 - Emphasize expected-total reconciliation, effective dates, eligibility, and
   fact grain.
 
 **Acceptance criteria:**
 
-- All singular tests appear with useful descriptions in generated dbt docs.
+- All singular tests have a readable business-intent summary.
 - Descriptions explain the protected business behavior without restating SQL.
+
+**Implemented:**
+
+- Added `docs/singular_business_tests.md` as the narrative index for the high-
+  value singular tests.
+- Grouped the tests by certified totals, eligibility/effective dates, and grain/
+  value constraints.
+- Linked the catalog from the project walkthrough so reviewers can find it from
+  the main review path.
 
 ## Deferred
 

@@ -139,13 +139,22 @@ models/
   semantic/sem_arr.yml
 tests/
   assert_ending_arr_expected_totals.sql
+  assert_ending_arr_expected_by_account.sql
+  assert_arr_movements_expected.sql
   assert_ineligible_lines_excluded.sql
+  assert_line_annualization.sql
+  assert_line_dates_within_subscription.sql
   assert_snapshot_grain.sql
-analysis/
-  verified_queries.sql
+  assert_ending_arr_non_negative.sql
+  assert_pricing_math.sql
+  assert_snapshot_only_contains_active_lines.sql
+  assert_snapshot_only_contains_active_subscriptions.sql
 docs/
+  singular_business_tests.md
   metric_contract_arr.md
   demo_runbook.md
+analysis/
+  verified_queries.sql
 ```
 
 ## 6. Acceptance Criteria
