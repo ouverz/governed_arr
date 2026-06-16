@@ -4,4 +4,4 @@ select
     cast(product_id as varchar) as product_id,
     cast(subscription_line_id as varchar) as subscription_line_id,
     cast(order_action as varchar) as order_action
-from {{ ref('raw_salesforce_order_lines') }}
+from {{ source('salesforce_raw', 'order_lines') }}

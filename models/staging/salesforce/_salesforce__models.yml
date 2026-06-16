@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_salesforce__accounts
-    description: Cleaned account records.
+    description: Cleaned account records from the raw Salesforce source layer.
     columns:
       - name: account_id
         data_tests: [not_null, unique]
@@ -16,13 +16,13 @@ models:
         data_tests: [not_null]
 
   - name: stg_salesforce__contracts
-    description: Cleaned commercial contracts.
+    description: Cleaned commercial contracts from the raw Salesforce source layer.
     columns:
       - name: contract_id
         data_tests: [not_null, unique]
 
   - name: stg_salesforce__opportunities
-    description: Cleaned closed-won commercial events.
+    description: Cleaned commercial opportunity events from the raw Salesforce source layer.
     columns:
       - name: opportunity_id
         data_tests: [not_null, unique]
@@ -48,7 +48,7 @@ models:
         data_tests: [not_null]
 
   - name: stg_salesforce__subscription_lines
-    description: Cleaned effective-dated subscription products and amendments.
+    description: Cleaned effective-dated subscription products and commercial changes.
     columns:
       - name: subscription_line_id
         data_tests: [not_null, unique]

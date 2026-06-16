@@ -11,4 +11,4 @@ select
     cast(list_unit_price as decimal(18, 2)) as list_unit_price,
     cast(discount_percent as decimal(18, 2)) as discount_percent,
     cast(net_amount_per_period as decimal(18, 2)) as net_amount_per_period
-from {{ ref('raw_salesforce_subscription_lines') }}
+from {{ source('salesforce_raw', 'subscription_lines') }}

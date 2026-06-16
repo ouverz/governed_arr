@@ -5,4 +5,4 @@ select
     cast(stage_name as varchar) as stage_name,
     cast(close_date as date) as close_date,
     cast(contract_id as varchar) as contract_id
-from {{ ref('raw_salesforce_opportunities') }}
+from {{ source('salesforce_raw', 'opportunities') }}

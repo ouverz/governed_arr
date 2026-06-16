@@ -1,0 +1,111 @@
+version: 2
+
+sources:
+  - name: salesforce_raw
+    description: Synthetic Salesforce source tables used to model the ARR commercial lifecycle.
+    schema: raw
+    tables:
+      - name: accounts
+        identifier: raw_salesforce_accounts
+        description: Raw Salesforce account records.
+        columns:
+          - name: account_id
+            data_tests: [not_null, unique]
+
+      - name: products
+        identifier: raw_salesforce_products
+        description: Raw Salesforce product catalog records.
+        columns:
+          - name: product_id
+            data_tests: [not_null, unique]
+
+      - name: contracts
+        identifier: raw_salesforce_contracts
+        description: Raw Salesforce contract records.
+        columns:
+          - name: contract_id
+            data_tests: [not_null, unique]
+          - name: account_id
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'accounts'), field: account_id}
+
+      - name: opportunities
+        identifier: raw_salesforce_opportunities
+        description: Raw Salesforce opportunity records.
+        columns:
+          - name: opportunity_id
+            data_tests: [not_null, unique]
+          - name: account_id
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'accounts'), field: account_id}
+          - name: contract_id
+            data_tests:
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'contracts'), field: contract_id}
+
+      - name: subscriptions
+        identifier: raw_salesforce_subscriptions
+        description: Raw Salesforce subscription records.
+        columns:
+          - name: subscription_id
+            data_tests: [not_null, unique]
+          - name: account_id
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'accounts'), field: account_id}
+          - name: contract_id
+            data_tests:
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'contracts'), field: contract_id}
+
+      - name: subscription_lines
+        identifier: raw_salesforce_subscription_lines
+        description: Raw Salesforce subscription line records.
+        columns:
+          - name: subscription_line_id
+            data_tests: [not_null, unique]
+          - name: subscription_id
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'subscriptions'), field: subscription_id}
+          - name: product_id
+            data_tests:
+              - not_null
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'products'), field: product_id}
+
+      - name: orders
+        identifier: raw_salesforce_orders
+        description: Raw Salesforce order records.
+        columns:
+          - name: order_id
+            data_tests: [not_null, unique]
+          - name: opportunity_id
+            data_tests:
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'opportunities'), field: opportunity_id}
+          - name: subscription_id
+            data_tests:
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'subscriptions'), field: subscription_id}
+
+      - name: order_lines
+        identifier: raw_salesforce_order_lines
+        description: Raw Salesforce order line records.
+        columns:
+          - name: order_line_id
+            data_tests: [not_null, unique]
+          - name: order_id
+            data_tests:
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'orders'), field: order_id}
+          - name: subscription_line_id
+            data_tests:
+              - relationships:
+                  arguments: {to: source('salesforce_raw', 'subscription_lines'), field: subscription_line_id}
