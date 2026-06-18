@@ -11,3 +11,10 @@ dbt_internal_packages/
 ci-state/
 arr-semantic-layer-lab/
 arr-semantic-layer-lab.zip
+
+# Presentation / portfolio export artifacts
+*.pptx
+*.pdf
+*.key
+*.keynote
+Executive_Semantic_Layer_Interview_Deck*_review.*
