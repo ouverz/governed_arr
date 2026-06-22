@@ -32,9 +32,9 @@ select
     subscriptions.start_date as subscription_start_date,
     subscriptions.end_date as subscription_end_date,
     subscriptions.currency,
-    products.is_arr_eligible and subscriptions.currency = 'USD' as is_arr_eligible,
+    products.is_arr_eligible and subscriptions.currency = 'EUR' as is_arr_eligible,
     case
-        when products.is_arr_eligible and subscriptions.currency = 'USD'
+        when products.is_arr_eligible and subscriptions.currency = 'EUR'
         then cast(
             lines.net_amount_per_period * 12.0 / lines.billing_interval_months
             as decimal(18, 2)

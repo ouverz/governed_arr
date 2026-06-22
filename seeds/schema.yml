@@ -67,7 +67,7 @@ seeds:
         data_tests:
           - accepted_values:
               arguments:
-                values: [USD]
+                values: [EUR]
 
   - name: raw_salesforce_subscription_lines
     description: Effective-dated subscription products and amendments.

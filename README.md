@@ -1,9 +1,28 @@
 # ARR Semantic Layer Lab
 
-A production-inspired learning project for building one governed ARR metric end to end with dbt, Snowflake, Metabase, and an AI-facing semantic layer.
+A minimal, production-shaped ARR metric product with governed definitions,
+repeatable validation, and a clear operating model from raw inputs to
+consumable metrics.
 
-The MVP is a Docker-first dbt project. It uses DuckDB locally for a
-reproducible build and retains a Snowflake profile example for deployment.
+This repository demonstrates one certified business metric, Ending ARR, built
+with dbt and deployed through a Docker-first workflow. The local MVP uses
+DuckDB for a reproducible build and retains Snowflake profile examples for
+isolated development and production deployment.
+
+## What this project proves
+
+- one metric can be defined explicitly and certified end to end;
+- business rules can be owned, versioned, tested, and reviewed;
+- public marts can be protected with contracts;
+- semantic consumption can sit on top of governed definitions; and
+- CI/CD can validate the pipeline before deployment.
+
+## What this project does not claim
+
+- it is not a full finance system;
+- it is not a live production ingestion pipeline in the local lab;
+- it does not prove a hosted dbt Semantic Layer query path locally; and
+- it is intentionally scoped to one metric, not a broad analytics platform.
 
 ## Portfolio Highlights
 

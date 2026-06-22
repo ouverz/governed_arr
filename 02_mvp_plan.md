@@ -62,7 +62,7 @@ The project plan states the broad definition but leaves several implementation c
 | Annualization | `net_amount_per_period * 12 / billing_interval_months` |
 | Discounts | Reflected in `net_amount_per_period` before annualization |
 | Credits, tax, one-time fees | Excluded from Ending ARR |
-| Currency | USD only |
+| Currency | EUR only |
 | Output grain | One row per `snapshot_date × account_id × subscription_id × product_family` |
 | Multiple eligible lines at output grain | Aggregated into one row |
 | Negative ARR | Not allowed in the MVP fact |

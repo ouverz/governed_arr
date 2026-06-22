@@ -7,7 +7,7 @@
 - **Technical owner:** Data
 - **Status:** MVP certified
 - **Reporting cadence:** Calendar month-end
-- **Currency:** USD only
+- **Currency:** EUR only
 
 ## Definition
 

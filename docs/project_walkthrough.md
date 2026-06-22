@@ -1,5 +1,19 @@
 # ARR Semantic Layer Lab: Sequential Project Walkthrough
 
+## Portfolio Framing
+
+This project is intentionally small but not superficial. It proves a single
+metric deeply enough to show:
+
+- a governed business definition;
+- clear ownership and change control;
+- repeatable modeling and validation;
+- a published consumption layer; and
+- a production-shaped deployment path.
+
+It does not try to model every finance process. The value is in the depth of
+the metric contract, not the breadth of the domain coverage.
+
 ## 1. Executive Summary
 
 This project creates a production-inspired, governed definition of **Ending
@@ -24,8 +38,24 @@ data team can make one important business metric:
 - difficult for consumers to misuse; and
 - portable from a local learning environment to Snowflake.
 
-The most important design choice was to go deep on one metric rather than build
-a broad but weak semantic layer.
+The most important design choice was to go deep on one metric rather than
+build a broad but weak semantic layer.
+
+## What This Proves, and What It Does Not
+
+### Proves
+
+- The ARR definition is explicit and reviewable.
+- The metric is computed consistently from seeded raw inputs.
+- The mart outputs are protected with tests and contracts.
+- The semantic consumption layer is governed rather than ad hoc.
+- The build and deployment path is repeatable.
+
+### Does not prove
+
+- Live ingestion from a production source system in this local lab.
+- A hosted dbt Semantic Layer query executed end to end locally.
+- A broader finance or rev-rec platform beyond the ARR scope.
 
 ---
 
@@ -95,7 +125,7 @@ The metric excludes:
 - one-time fees;
 - services;
 - credits and tax;
-- non-USD subscriptions in the MVP; and
+- non-EUR subscriptions in the MVP; and
 - subscription or line periods that are inactive on the snapshot date.
 
 Ending ARR is explicitly not:
@@ -215,7 +245,7 @@ therefore resolves the ambiguous parts:
 | When is ARR measured? | Calendar month-end |
 | What determines historical activity? | Subscription and line effective dates |
 | Which products count? | Product catalog field `is_arr_eligible` |
-| Which currencies count? | USD only |
+| Which currencies count? | EUR only |
 | How are billing intervals compared? | Annualize using `12 / billing_interval_months` |
 | How are discounts handled? | Use the stored net amount |
 | What is the output grain? | Date, account, subscription, product family |
@@ -896,7 +926,7 @@ At the end, you should be able to answer:
 3. The fixed January-June 2025 time spine is retained only for the local
    synthetic fixture. Production uses a configurable history and reporting
    range.
-4. USD-only logic is intentional. Multi-currency ARR would require explicit FX
+4. EUR-only logic is intentional. Multi-currency ARR would require explicit FX
    policy, dates, and tests.
 5. Account segment and region are current-state attributes, so historical
    slicing can be restated after account changes.

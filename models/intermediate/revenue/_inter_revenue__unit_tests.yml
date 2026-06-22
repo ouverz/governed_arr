@@ -1,22 +1,22 @@
 version: 2
 
 unit_tests:
-  - name: int_subscription_arr_lines_calculates_only_eligible_usd_arr
+  - name: int_subscription_arr_lines_calculates_only_eligible_eur_arr
     description: >
       Isolates annualization and eligibility: monthly and quarterly recurring
-      USD lines annualize, while services and non-USD lines contribute zero.
+      EUR lines annualize, while services and non-EUR lines contribute zero.
     model: int_subscription_arr_lines
     given:
       - input: ref('stg_salesforce__subscription_lines')
         rows:
-          - {subscription_line_id: monthly, subscription_id: usd_subscription, product_id: recurring, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 1, quantity: 1, list_unit_price: 100, discount_percent: 0, net_amount_per_period: 100}
-          - {subscription_line_id: quarterly, subscription_id: usd_subscription, product_id: recurring, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 3, quantity: 1, list_unit_price: 300, discount_percent: 0, net_amount_per_period: 300}
-          - {subscription_line_id: services, subscription_id: usd_subscription, product_id: services, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 1, quantity: 1, list_unit_price: 500, discount_percent: 0, net_amount_per_period: 500}
-          - {subscription_line_id: non_usd, subscription_id: eur_subscription, product_id: recurring, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 1, quantity: 1, list_unit_price: 100, discount_percent: 0, net_amount_per_period: 100}
+          - {subscription_line_id: monthly, subscription_id: eur_subscription, product_id: recurring, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 1, quantity: 1, list_unit_price: 100, discount_percent: 0, net_amount_per_period: 100}
+          - {subscription_line_id: quarterly, subscription_id: eur_subscription, product_id: recurring, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 3, quantity: 1, list_unit_price: 300, discount_percent: 0, net_amount_per_period: 300}
+          - {subscription_line_id: services, subscription_id: eur_subscription, product_id: services, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 1, quantity: 1, list_unit_price: 500, discount_percent: 0, net_amount_per_period: 500}
+          - {subscription_line_id: non_eur, subscription_id: non_eur_subscription, product_id: recurring, prior_subscription_line_id: null, amendment_action: new, line_start_date: '2025-01-01', line_end_date: '2025-12-31', billing_interval_months: 1, quantity: 1, list_unit_price: 100, discount_percent: 0, net_amount_per_period: 100}
       - input: ref('stg_salesforce__subscriptions')
         rows:
-          - {subscription_id: usd_subscription, account_id: account_1, contract_id: contract_1, original_subscription_id: null, renewed_from_subscription_id: null, subscription_status: active, start_date: '2025-01-01', end_date: '2025-12-31', currency: USD}
-          - {subscription_id: eur_subscription, account_id: account_2, contract_id: contract_2, original_subscription_id: null, renewed_from_subscription_id: null, subscription_status: active, start_date: '2025-01-01', end_date: '2025-12-31', currency: EUR}
+          - {subscription_id: eur_subscription, account_id: account_1, contract_id: contract_1, original_subscription_id: null, renewed_from_subscription_id: null, subscription_status: active, start_date: '2025-01-01', end_date: '2025-12-31', currency: EUR}
+          - {subscription_id: non_eur_subscription, account_id: account_2, contract_id: contract_2, original_subscription_id: null, renewed_from_subscription_id: null, subscription_status: active, start_date: '2025-01-01', end_date: '2025-12-31', currency: GBP}
       - input: ref('stg_salesforce__products')
         rows:
           - {product_id: recurring, product_name: Recurring Product, product_family: Platform, charge_type: recurring, is_arr_eligible: true}
@@ -26,5 +26,4 @@ unit_tests:
         - {subscription_line_id: monthly, is_arr_eligible: true, line_arr: 1200.00}
         - {subscription_line_id: quarterly, is_arr_eligible: true, line_arr: 1200.00}
         - {subscription_line_id: services, is_arr_eligible: false, line_arr: 0.00}
-        - {subscription_line_id: non_usd, is_arr_eligible: false, line_arr: 0.00}
-
+        - {subscription_line_id: non_eur, is_arr_eligible: false, line_arr: 0.00}
