@@ -1,10 +1,8 @@
-# Building One Trusted ARR Metric for Humans and AI
+# Building One Governed ARR Metric
 
-I built this project to answer a simple question that shows up in every revenue team sooner or later:
+Most ARR implementations fail for a familiar reason: the definition is treated as an implementation detail. Different teams calculate the same number different ways, then spend time reconciling why the answers do not match.
 
-> Can we make one ARR number that Finance trusts, RevOps can explain, and AI can safely reuse?
-
-My answer is yes — but only if the metric is treated as a governed product, not a loose SQL query.
+I built this project to avoid that pattern. It focuses on one metric, Ending ARR, and treats the metric itself as the product. The scope is intentionally narrow, but the implementation goes deep enough to prove the definition, the ownership model, the validation stack, and the delivery path.
 
 ## Why ARR is the right test case
 
@@ -12,12 +10,12 @@ ARR looks simple until you have to make it real. Then the edge cases show up:
 
 - monthly, quarterly, and annual billing
 - discounts
-- one-time and services exclusions
+- one-time fees and services exclusions
 - churn and reactivation
 - renewal uplift
-- historical inclusion even when a subscription is later cancelled or expired
+- historical inclusion even when a subscription is later cancelled
 
-That is why this project focuses on **Ending ARR** rather than trying to build a broad semantic layer with many half-finished metrics. If the foundation is weak, every downstream dashboard, model, or AI assistant will reinterpret the metric differently.
+That is why the project focuses on **Ending ARR** instead of trying to build a broad semantic layer with many half-finished metrics. If the foundation is weak, every downstream dashboard, model, or AI assistant will reinterpret the metric differently.
 
 ## What the project actually does
 
@@ -35,13 +33,13 @@ The point is not just to calculate ARR. The point is to prove that the metric is
 
 ## The trust stack
 
-I think the most interesting part of the project is the stack of controls around the metric:
+The strongest part of the project is the stack of controls around the metric:
 
-1. **Metric contract** — who owns the metric, what it means, and what it is not
-2. **Business rules** — effective dates, eligibility, annualization, and exclusions
-3. **Expected answers** — independent fixture totals calculated before implementation
-4. **Tests** — singular tests, unit tests, and contract enforcement
-5. **Semantic layer** — a certified consumption surface so BI and AI do not rebuild the logic differently
+1. **Metric contract** - who owns the metric, what it means, and what it is not
+2. **Business rules** - effective dates, eligibility, annualization, and exclusions
+3. **Expected answers** - independent fixture totals calculated before implementation
+4. **Tests** - singular tests, unit tests, and contract enforcement
+5. **Semantic consumption** - a certified surface so BI and AI do not rebuild the logic differently
 
 That stack matters because trust is not a vibe. It is the result of repeated checks that all agree with each other.
 
@@ -76,10 +74,10 @@ That turns the Snowflake piece from “we wrote SQL” into “we verified the g
 
 If I were presenting this as a portfolio piece, I would emphasize four things:
 
-- **Depth over breadth** — one metric, fully worked through
-- **Governance** — business ownership, change control, and invalid-use boundaries
-- **Verification** — tests and hand-calculated fixtures, not just “it runs”
-- **AI readiness** — certified meaning as a prerequisite for safe reuse
+- **Depth over breadth** - one metric, fully worked through
+- **Governance** - business ownership, change control, and invalid-use boundaries
+- **Verification** - tests and hand-calculated fixtures, not just “it runs”
+- **Controlled reuse** - certified meaning as the prerequisite for safe BI and AI consumption
 
 ## What I intentionally left out
 
@@ -89,7 +87,7 @@ Those are valid next steps, but they would dilute the main story.
 
 ## A more tangible way to show the project
 
-If you want this to leave a stronger impression than a standard blog post, the best asset is not more words — it is a **visual case study page**.
+If you want this to leave a stronger impression than a standard blog post, the best asset is not more words - it is a **visual case study page**.
 
 For this repo, that means:
 

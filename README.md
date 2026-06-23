@@ -4,10 +4,10 @@ A minimal, production-shaped ARR metric product with governed definitions,
 repeatable validation, and a clear operating model from raw inputs to
 consumable metrics.
 
-This repository demonstrates one certified business metric, Ending ARR, built
-with dbt and deployed through a Docker-first workflow. The local MVP uses
-DuckDB for a reproducible build and retains Snowflake profile examples for
-isolated development and production deployment.
+This repository demonstrates one certified business metric, Ending ARR,
+implemented as a governed data product rather than a loose analytics demo.
+The local MVP uses DuckDB for reproducible validation and includes the
+Snowflake deployment path as part of the operating model, not as an afterthought.
 
 ## What this project proves
 
@@ -29,7 +29,7 @@ isolated development and production deployment.
 - One governed metric, Ending ARR, defined end to end.
 - Real ARR edge cases: billing intervals, discounts, exclusions, churn, reactivation, and renewals.
 - A documented metric contract, singular business tests, and model/unit tests that prove the logic.
-- A semantic-layer story that distinguishes certified BI consumption from AI consumption.
+- A governed consumption story that distinguishes certified BI and AI reuse from raw-table interpretation.
 - A reproducible local build that reviewers can run with Docker only.
 
 ## What is intentionally deferred
@@ -93,8 +93,8 @@ make build-prod
 9. [`snowflake_semantic_views/snowflake_revenue_metrics.sql`](snowflake_semantic_views/snowflake_revenue_metrics.sql) for the native Snowflake semantic view.
 10. [`docs/ci_cd.md`](docs/ci_cd.md) for GitHub Actions validation and Snowflake deployment.
 
-## Shareable Drafts
+## Public Assets
 
-- [`docs/shareable/portfolio-case-study.html`](docs/shareable/portfolio-case-study.html) for a visual, browser-openable case-study page.
-- [`docs/shareable/blog-draft.md`](docs/shareable/blog-draft.md) for a longer portfolio blog post.
-- [`docs/shareable/linkedin-draft.md`](docs/shareable/linkedin-draft.md) for a short announcement post.
+- [`docs/shareable/portfolio-case-study.html`](docs/shareable/portfolio-case-study.html) as the primary visual case-study page.
+- [`docs/shareable/blog-draft.md`](docs/shareable/blog-draft.md) as the long-form publication draft.
+- [`docs/shareable/linkedin-draft.md`](docs/shareable/linkedin-draft.md) as the short announcement draft.
