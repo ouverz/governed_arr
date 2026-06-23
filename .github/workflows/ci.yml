@@ -75,7 +75,7 @@ jobs:
 
       - name: Build modified nodes and dependencies
         if: steps.state.outputs.available == 'true'
-        run: docker compose run --rm dbt build --select "+state:modified+" --state ci-state
+        run: docker compose run --rm dbt build --select "+state:modified+" --state ci-state --exclude resource_type:test
 
       - name: Run complete local build and data tests
         run: docker compose run --rm dbt build

@@ -18,7 +18,8 @@ dispatches. It:
    infer input schemas on a fresh runner;
 4. runs the focused dbt unit tests;
 5. downloads the latest successful `main` manifest, when one exists;
-6. builds modified nodes with their dependencies and descendants;
+6. builds modified nodes with their dependencies and descendants while
+   skipping data tests in the slim step;
 7. runs the complete local DuckDB build and data-test suite;
 8. executes the local semantic contract validator; and
 9. publishes the successful `main` manifest for future state comparison.
@@ -29,7 +30,9 @@ selection is skipped. The complete build still runs.
 The modified-state build is an optimization and change-impact check, not a
 replacement for the complete local build. Prefixing and suffixing
 `state:modified` with `+` includes required ancestors and affected descendants
-in the fresh CI database.
+in the fresh CI database. The slim step skips data tests because partial
+selection can leave some test contexts under-populated; the full `dbt build`
+later in CI still runs the complete test set.
 
 ## GitHub Configuration
 
