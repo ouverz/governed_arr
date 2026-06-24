@@ -32,6 +32,10 @@ Snowflake deployment path as part of the operating model, not as an afterthought
 - A governed consumption story that distinguishes certified BI and AI reuse from raw-table interpretation.
 - A reproducible local build that reviewers can run with Docker only.
 
+## Pattern borrowed from mature revenue stacks
+
+The project follows a pattern used by stronger revenue analytics teams: keep raw inputs separate, derive historical truth with effective dates, and expose a clean consumption layer on top. In practice that means the ARR logic is anchored in point-in-time snapshot facts rather than current-state rows, so month-end truth stays stable and explainable. The same separation also makes it easier to publish a certified dataset for BI or semantic consumption without asking downstream users to interpret raw source tables directly.
+
 ## What is intentionally deferred
 
 This repo is scoped as a lab rather than a full production platform.
