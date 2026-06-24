@@ -94,9 +94,7 @@ make build-prod
 
 ## Documentation
 
-1. [`01_project_plan.md`](01_project_plan.md) for the target architecture.
-2. [`02_mvp_plan.md`](02_mvp_plan.md) for the scoped first release and implementation timeline.
-3. [`docs/metric_contract_arr.md`](docs/metric_contract_arr.md) for the certified metric contract.
-4. [`docs/singular_business_tests.md`](docs/singular_business_tests.md) for the human-readable test catalog.
-5. [`snowflake_semantic_views/snowflake_revenue_metrics.sql`](snowflake_semantic_views/snowflake_revenue_metrics.sql) for the native Snowflake semantic view.
-6. [`docs/ci_cd.md`](docs/ci_cd.md) for GitHub Actions validation and Snowflake deployment.
+1. [`docs/metric_contract_arr.md`](docs/metric_contract_arr.md) for the certified metric contract.
+2. [`docs/singular_business_tests.md`](docs/singular_business_tests.md) for the human-readable test catalog.
+3. [`snowflake_semantic_views/snowflake_revenue_metrics.sql`](snowflake_semantic_views/snowflake_revenue_metrics.sql) for the native Snowflake semantic view.
+4. [`docs/ci_cd.md`](docs/ci_cd.md) for GitHub Actions validation and Snowflake deployment.
